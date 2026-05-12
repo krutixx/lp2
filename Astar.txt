@@ -1,0 +1,87 @@
+import heapq
+
+goal = [[1,2,3],
+        [4,5,6],
+        [7,8,0]]
+
+moves = [(-1,0),(1,0),(0,-1),(0,1)]
+
+# Heuristic Function
+def heuristic(state):
+    count = 0
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] != 0 and state[i][j] != goal[i][j]:
+                count += 1
+    return count
+
+# Find blank tile
+def find_blank(state):
+    for i in range(3):
+        for j in range(3):
+            if state[i][j] == 0:
+                return i,j
+
+# A* Algorithm
+def astar(start):
+
+    pq = []
+    visited = set()
+
+    heapq.heappush(pq,(heuristic(start),0,start,[]))
+
+    while pq:
+
+        f,g,current,path = heapq.heappop(pq)
+
+        if tuple(map(tuple,current)) in visited:
+            continue
+
+        visited.add(tuple(map(tuple,current)))
+
+        if current == goal:
+            return path + [current]
+
+        x,y = find_blank(current)
+
+        for dx,dy in moves:
+
+            nx,ny = x+dx,y+dy
+
+            if 0<=nx<3 and 0<=ny<3:
+
+                new = [row[:] for row in current]
+
+                new[x][y],new[nx][ny] = new[nx][ny],new[x][y]
+
+                heapq.heappush(
+                    pq,
+                    (
+                        g+1+heuristic(new),
+                        g+1,
+                        new,
+                        path+[current]
+                    )
+                )
+
+# Input
+start = []
+
+print("Enter Initial State:")
+
+for i in range(3):
+    row = list(map(int,input().split()))
+    start.append(row)
+
+# Solve
+solution = astar(start)
+
+# Output
+for step,state in enumerate(solution):
+
+    print("Step",step)
+
+    for row in state:
+        print(row)
+
+    print()

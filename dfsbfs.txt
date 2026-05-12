@@ -1,0 +1,62 @@
+from collections import deque
+
+# Create graph using adjacency list
+graph = {}
+
+# Input number of vertices
+vertices = int(input("Enter number of vertices: "))
+
+# Input all vertex names
+print("Enter vertex names:")
+for i in range(vertices):
+    vertex = input()
+    graph[vertex] = []
+
+# Input number of edges
+edges = int(input("Enter number of edges: "))
+
+print("Enter edges (vertex1 vertex2):")
+
+# Undirected graph
+for i in range(edges):
+    u, v = input().split()
+
+    graph[u].append(v)
+    graph[v].append(u)
+
+# ---------------- DFS ----------------
+visited_dfs = set()
+
+def dfs(node):
+    if node not in visited_dfs:
+        print(node, end=" ")
+        visited_dfs.add(node)
+
+        for neighbour in graph[node]:
+            dfs(neighbour)
+
+# ---------------- BFS ----------------
+def bfs(start):
+    visited_bfs = set()
+    queue = deque()
+
+    visited_bfs.add(start)
+    queue.append(start)
+
+    while queue:
+        node = queue.popleft()
+        print(node, end=" ")
+
+        for neighbour in graph[node]:
+            if neighbour not in visited_bfs:
+                visited_bfs.add(neighbour)
+                queue.append(neighbour)
+
+# ---------------- Main ----------------
+start_node = input("\nEnter starting node: ")
+
+print("\nDFS Traversal:")
+dfs(start_node)
+
+print("\n\nBFS Traversal:")
+bfs(start_node)

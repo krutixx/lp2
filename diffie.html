@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<title> Diffie-Hellman</title>
+</head>
+
+<body>
+<h2>Diffie Hellman Key Exchange</h2>
+<h3>Sharvil user</h3>
+
+<label>Prime Number (p): </label>
+<input type="number" id="p">
+<br><br>
+
+<label>Generator (g): </label>
+<input type="number" id="g">
+<br><br>
+
+<label>Sharvil's Private Key (a): </label>
+<input type="number" id="a">
+<br><br>
+
+<h3>Akash(Second Party)</h3>
+
+<label>Akash's Private Key (b): </label>
+<input type="number" id="b">
+<br><br>
+
+<button onclick="calculate()">Generate Keys</button>
+
+<hr>
+
+<h3>Results</h3>
+
+<p>Sharvil's Public Key (A): <span id="A"></span> </p>
+<p>Akash's Public Key (B): <span id="B"></span></p>
+<br>
+<p>Sharvil's Shared Secret Key: <span id="S1"></span></p>
+<p>Akash's Shared Secret Key: <span id="S2"></span></p>
+
+<script>
+
+function modExp(base,exp,mod) {
+	let result=1
+	base = base % mod;
+	while(exp>0){
+		if(exp % 2 ===1)
+			result=(result*base)%mod;
+
+		exp=Math.floor(exp/2)
+		base=(base*base)%mod;
+	}
+	return result;
+}
+
+function calculate(){
+	let p = parseInt(document.getElementById('p').value);
+	let g = parseInt(document.getElementById('g').value);
+	let a= parseInt(document.getElementById('a').value);
+	let b = parseInt(document.getElementById('b').value);
+
+	let A = modExp(g,a,p);
+	let B = modExp(g,b,p);
+
+	let S1=modExp(B,a,p);
+	let S2=modExp(A,b,p);
+	
+	document.getElementById("A").innerText=A;
+	document.getElementById("B").innerText=B;
+	document.getElementById("S1").innerText=S1;
+	document.getElementById("S2").innerText=S2;  
+}
+</script>
+</body>
+</html>
