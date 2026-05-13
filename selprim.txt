@@ -1,0 +1,108 @@
+import sys
+
+# Selection Sort
+def selection_sort(arr):
+
+    for i in range(len(arr) - 1):
+
+        min_index = i
+
+        for j in range(i + 1, len(arr)):
+
+            if arr[j] < arr[min_index]:
+                min_index = j
+
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+
+        print("Step", i + 1, ":", arr)
+
+
+# Prim's Algorithm
+def prim(graph, labels):
+
+    V = len(graph)
+
+    selected = [False] * V
+    selected[0] = True
+
+    total = 0
+
+    print("\nEdges in MST:")
+
+    for _ in range(V - 1):
+
+        minimum = sys.maxsize
+        x = y = 0
+
+        for i in range(V):
+
+            if selected[i]:
+
+                for j in range(V):
+
+                    if not selected[j] and graph[i][j] != 0:
+
+                        if graph[i][j] < minimum:
+
+                            minimum = graph[i][j]
+                            x, y = i, j
+
+        print(labels[x], "-", labels[y], ":", graph[x][y])
+
+        total += graph[x][y]
+
+        selected[y] = True
+
+    print("Total Weight =", total)
+
+
+# -------- MAIN PROGRAM --------
+
+# Selection Sort Input
+
+arr = []
+
+n = int(input("Enter number of elements: "))
+
+for i in range(n):
+
+    num = int(input("Enter number: "))
+
+    arr.append(num)
+
+print("\nOriginal Array:", arr)
+
+selection_sort(arr)
+
+print("Sorted Array:", arr)
+
+
+# Prim's Input
+
+V = int(input("\nEnter number of vertices: "))
+
+labels = []
+
+for i in range(V):
+
+    label = input("Enter vertex label: ")
+
+    labels.append(label)
+
+graph = []
+
+print("\nEnter adjacency matrix:")
+
+for i in range(V):
+
+    row = []
+
+    for j in range(V):
+
+        num = int(input())
+
+        row.append(num)
+
+    graph.append(row)
+
+prim(graph, labels)
