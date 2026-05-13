@@ -1,0 +1,92 @@
+plaintext = "informationsecurity"
+key = "lock"
+
+# ---------------- ENCRYPTION ----------------
+
+col = len(key)
+row = len(plaintext) // col + 1
+
+# Add padding
+while len(plaintext) < row * col:
+    plaintext += "x"
+
+# Create matrix
+matrix = []
+index = 0
+
+for i in range(row):
+
+    temp = []
+
+    for j in range(col):
+        temp.append(plaintext[index])
+        index += 1
+
+    matrix.append(temp)
+
+# Find column order
+order = []
+
+for i in range(col):
+
+    count = 0
+
+    for j in range(col):
+
+        if key[j] < key[i]:
+            count += 1
+
+    order.append(count)
+
+# Generate ciphertext
+ciphertext = ""
+
+for num in range(col):
+
+    for i in range(col):
+
+        if order[i] == num:
+
+            for j in range(row):
+                ciphertext += matrix[j][i]
+
+print("Ciphertext:", ciphertext)
+
+# ---------------- DECRYPTION ----------------
+
+# Empty matrix for decryption
+decrypt_matrix = []
+
+for i in range(row):
+
+    temp = []
+
+    for j in range(col):
+        temp.append("")
+
+    decrypt_matrix.append(temp)
+
+# Fill columns using ciphertext
+index = 0
+
+for num in range(col):
+
+    for i in range(col):
+
+        if order[i] == num:
+
+            for j in range(row):
+
+                decrypt_matrix[j][i] = ciphertext[index]
+                index += 1
+
+# Read row-wise to get plaintext
+decrypted_text = ""
+
+for i in range(row):
+
+    for j in range(col):
+
+        decrypted_text += decrypt_matrix[i][j]
+
+print("Decrypted Text:", decrypted_text)
